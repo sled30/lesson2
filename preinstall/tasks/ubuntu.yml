@@ -1,0 +1,4 @@
+- name: install packet
+  apt:
+    name: "{{ packets_deb }}"
+    update_cache: yes

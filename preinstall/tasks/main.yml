@@ -1,0 +1,33 @@
+
+- name: include ubuntu package
+  include: ubuntu.yml
+  when: ansible_os_family == "Debian"
+
+- name: include CentOS package
+  include: centos.yml
+  when: ansible_os_family == "RedHat"
+- name: Create groups
+  group:
+    name: "{{ app_user }}"
+    state: present
+
+- name: Create users
+  user:
+    name: "{{ app_user }}"
+    groups: "{{ app_user }}"
+    password: "{{ app_user_passwd | password_hash('sha512') }}"
+    append: yes
+  #
+
+- name: create app dir
+  file:
+    path: "{{ app_base_dir }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+
+- name: git clone
+  git:
+    repo: 'https://github.com/mbaran0v/python-sample-app.git'
+    dest: "{{ app_base_dir }}"
+  become_user: "{{ app_user }}"

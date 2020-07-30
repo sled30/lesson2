@@ -1,0 +1,24 @@
+- name: Устанавливаем пакеты
+  package:
+    name: "{{ centos_paket }}"
+    state: present
+
+- name: Check initialised db
+  stat:
+    path: /var/lib/pgsql/data/postgresql.conf
+  register: initdb
+
+- name: DB initialised
+  command:
+    cmd: /usr/bin/postgresql-setup initdb
+  when: initdb.stat.exists == False
+
+- name: fix connecion db
+  template:
+    src: pg_hba.conf
+    dest: /var/lib/pgsql/data/
+- name: Включаем постгрес в загрузку
+  systemd:
+    name: postgresql
+    enabled: yes
+    state: restarted

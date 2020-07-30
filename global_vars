@@ -1,0 +1,6 @@
+app_user: deployer
+app_user_passwd: deployer
+app_base_dir: "/home/{{ app_user }}/app"
+virt_base_dir: "{{ app_base_dir }}/env"
+nginx_base_dir: /etc/nginx/
+db_name: "{{ app_user }}"

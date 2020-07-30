@@ -1,0 +1,13 @@
+[Unit]
+Description=app-daemon
+
+[Service]
+Type=simple
+User={{ app_user }}
+#Group={{ app_user }}
+PermissionsStartOnly=true
+ExecStart=/usr/bin/python3 {{ app_base_dir}}/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

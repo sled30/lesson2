@@ -1,0 +1,19 @@
+- name: Устанавливаем nginx пакеты
+  package:
+    name: nginx
+    state: present
+
+- name: Remove original config
+  file:
+    path: "{{ nginx_base_dir }}/nginx.conf"
+    state: absent
+- name: Copy template nginx config
+  template:
+    src: nginx.conf
+    dest: "{{ nginx_base_dir }}/nginx.conf"
+
+- name: Включаем nginx в загрузку
+  systemd:
+    name: nginx
+    enabled: yes
+    state: restarted

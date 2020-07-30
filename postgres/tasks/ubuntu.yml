@@ -1,0 +1,10 @@
+- name: Устанавливаем пакеты
+  package:
+    name: "{{ ubuntu_paket }}"
+    state: present
+
+- name: Включаем постгрес в загрузку
+  systemd:
+    name: postgresql
+    enabled: yes
+    state: restarted

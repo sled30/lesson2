@@ -1,0 +1,13 @@
+ubuntu_paket:
+  - postgresql
+  - postgresql-contrib
+  - libpq-dev
+  - python3-psycopg2
+
+centos_paket:
+  - postgresql
+  - postgresql-server
+  - postgresql-contrib
+  - postgresql-libs
+  - libpqxx-devel
+  - python3-psycopg2

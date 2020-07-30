@@ -1,0 +1,5 @@
+- name: install cent packet
+  package:
+    name: "{{ packets_rpm }}"
+- name: Disable SELinux
+  selinux: state=disabled

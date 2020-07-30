@@ -1,0 +1,10 @@
+
+- name: install packet
+  apt:
+    name: "{{ packets }}"
+    update_cache: yes
+
+- name: create app dir
+  file:
+    path: /app
+    state: directory

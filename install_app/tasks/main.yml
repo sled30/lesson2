@@ -1,0 +1,47 @@
+- name: Install virtualenv
+  pip:
+    name:
+      - setuptools
+      - virtualenv
+    executable: pip3
+
+- name: install requirements from global
+  command: 'pip3 install -r {{ app_base_dir }}/requirements.txt'
+
+- name: Fix dbexport FLASK_APP=app.py connect in config.py
+  replace:
+    dest: "{{ app_base_dir}}/config.py"
+    regexp: "'postgresql://worker:worker@localhost/app'"
+    replace: "'postgresql://{{ app_user }}:{{ app_user_passwd }}@localhost/{{ db_name }}'"
+
+
+- name: Import db
+  command:
+    cmd: "/usr/local/bin/flask db upgrade"
+    chdir: "{{ app_base_dir }}"
+  environment:
+    FLASK_APP: "{{ app_base_dir}}/app.py"
+  become_user: "{{ app_user }}"
+
+
+- name: Fix listen addres
+  replace:
+    dest: "{{ app_base_dir}}/app.py"
+    regexp: "'0.0.0.0'"
+    replace: "'127.0.0.1'"
+
+- name: Copy systemd script
+  template:
+    src: app-daemon.service
+    dest: "/etc/systemd/system/app-daemon.service"
+    mode: 664
+
+- name: restart systemd
+  systemd:
+    daemon_reload: yes
+
+- name: enable app daemon
+  systemd:
+    name: app-daemon
+    state: started
+    enabled: yes
