@@ -1,0 +1,14 @@
+---
+    - hosts: app
+      become: True
+      vars_files:
+        - global_vars
+
+      roles:
+        - role: preinstall
+        - role: postgres
+        - role: install_app
+        - role: nginx
+
+## request
+# curl --header "Content-Type: application/json" --request POST --data '{"id": "1","username": "user123", "email": "user@example.com","password_hash": "example"}' http://localhost:80/api/user
